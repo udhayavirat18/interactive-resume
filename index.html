@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Resume | Udhaya Kumar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #3d3d3d;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .stat-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link.active {
+            background-color: #3b82f6;
+            color: white;
+            transform: translateX(4px);
+        }
+        .nav-link:not(.active):hover {
+            background-color: #e0e7ff;
+            color: #1e3a8a;
+            transform: translateX(4px);
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="min-h-screen lg:flex">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full lg:w-64 bg-white shadow-lg p-6 lg:fixed lg:h-screen">
+            <div class="text-center lg:text-left">
+                <h1 class="text-2xl font-bold text-gray-800">Udhaya Kumar</h1>
+                <p class="text-sm text-gray-500 mt-1">Software Engineer</p>
+            </div>
+            <nav class="mt-10">
+                <a href="#home" class="nav-link active flex items-center px-4 py-3 my-2 text-gray-700 rounded-lg" data-section="home">
+                    <svg class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    Home
+                </a>
+                <a href="#experience" class="nav-link flex items-center px-4 py-3 my-2 text-gray-700 rounded-lg" data-section="experience">
+                     <svg class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                    Experience
+                </a>
+                <a href="#skills" class="nav-link flex items-center px-4 py-3 my-2 text-gray-700 rounded-lg" data-section="skills">
+                    <svg class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path></svg>
+                    Skills
+                </a>
+            </nav>
+            <div class="absolute bottom-6 left-6 right-6">
+                <p class="text-sm text-gray-600 mb-2">udhayavirat12@kakao.com</p>
+                <div class="flex space-x-4">
+                    <a href="https://www.linkedin.com/in/your-profile" target="_blank" class="text-gray-500 hover:text-blue-600">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <a href="https://github.com/udhayavirat18" target="_blank" class="text-gray-500 hover:text-gray-900">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="lg:ml-64 p-6 md:p-10 w-full">
+            
+            <!-- Home Section -->
+            <section id="home" class="content-section active fade-in">
+                <div class="bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                    <h2 class="text-3xl font-bold text-gray-800">Professional Summary</h2>
+                    <p class="mt-4 text-lg text-gray-600 leading-relaxed">
+                        A results-driven Software Engineer with 3.8 years of experience specializing in building and optimizing scalable, user-centric web applications with React, Redux, and TypeScript. Passionate about the FinTech industry and eager to contribute to creating innovative financial services that have a global impact.
+                    </p>
+                </div>
+
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="stat-card">
+                        <div class="text-4xl font-bold text-blue-600" id="engagement-stat">0%</div>
+                        <p class="mt-2 text-gray-500">Increase in User Engagement</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="text-4xl font-bold text-blue-600" id="load-time-stat">0%</div>
+                        <p class="mt-2 text-gray-500">Reduction in Load Time</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="text-4xl font-bold text-blue-600" id="coverage-stat">0%</div>
+                        <p class="mt-2 text-gray-500">Test Code Coverage</p>
+                    </div>
+                </div>
+                
+                 <div class="mt-8 bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Education & Languages</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-lg text-gray-700">Education</h3>
+                            <p class="mt-2"><strong>Bachelor of Engineering (B.E.), Mechanical Engineering</strong></p>
+                            <p class="text-gray-500">Prathyusha Engineering College</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg text-gray-700">Languages</h3>
+                            <p class="mt-2"><strong>English:</strong> Professional Working Proficiency</p>
+                            <p class="mt-1"><strong>Tamil:</strong> Native Proficiency</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="content-section fade-in">
+                <div class="bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Experience & Projects</h2>
+                     <p class="mb-6 text-gray-600">A detailed look at my professional journey and personal projects. The following tabs showcase my contributions at Syncfusion and a full-stack authentication application I developed, demonstrating my technical capabilities.</p>
+                    <div>
+                        <div class="border-b border-gray-200">
+                            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                                <button class="tab-button active text-blue-600 border-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="experience-tab">
+                                    Professional Experience
+                                </button>
+                                <button class="tab-button text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="projects-tab">
+                                    Projects
+                                </button>
+                            </nav>
+                        </div>
+
+                        <div id="experience-tab" class="tab-content active py-6">
+                            <h3 class="text-xl font-bold text-gray-800">Software Developer Level 3</h3>
+                            <p class="text-md text-gray-500 mt-1">Syncfusion | Chennai, India | Jan 2022 - Present</p>
+                            <ul class="mt-4 list-disc list-inside space-y-2 text-gray-700">
+                                <li>Engineered and maintained the core user dashboard for an enterprise analytics platform using React and Redux, leading to a <strong>15% increase</strong> in user engagement.</li>
+                                <li>Optimized application performance by implementing code-splitting and lazy loading, <strong>reducing initial load time by 30%</strong> and improving Core Web Vitals.</li>
+                                <li>Collaborated with UX/UI designers and backend developers to implement new features for over 100,000 users in a fast-paced agile environment.</li>
+                                <li>Implemented a comprehensive testing suite with Jest and React Testing Library, <strong>increasing code coverage from 60% to 85%</strong> and significantly reducing production bugs.</li>
+                            </ul>
+                        </div>
+                        <div id="projects-tab" class="tab-content py-6" style="display: none;">
+                             <h3 class="text-xl font-bold text-gray-800">MERN Auth App</h3>
+                            <div class="flex space-x-4 mt-2 mb-4">
+                               <a href="https://udhayakumar.xyz/signup" target="_blank" class="text-blue-600 hover:underline font-medium">Live Demo</a>
+                               <a href="https://github.com/udhayavirat18/mern-auth" target="_blank" class="text-blue-600 hover:underline font-medium">GitHub Repository</a>
+                            </div>
+                            <ul class="mt-4 list-disc list-inside space-y-2 text-gray-700">
+                                <li>Developed a secure, full-stack user authentication system featuring user registration, login, and profile management with protected API routes.</li>
+                                <li>Implemented a robust authentication flow using JWT stored in HTTP-only cookies to enhance security and manage user sessions effectively.</li>
+                                <li>Built a clean, responsive front-end with React that interacts with a secure backend built with Express.js and MongoDB for managing user data.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills" class="content-section fade-in">
+                <div class="bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Technical Skills</h2>
+                    <p class="mb-6 text-gray-600">A visual representation of my technical proficiency across different domains. This radar chart highlights my core strengths in frontend development, with solid experience in backend technologies and modern development practices.</p>
+                    <div class="chart-container">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Navigation Logic
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = link.getAttribute('data-section');
+
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+
+                    contentSections.forEach(s => {
+                        s.classList.remove('active');
+                        if(s.id === sectionId) {
+                            s.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Stat Counter Animation
+            function animateValue(obj, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    obj.innerHTML = Math.floor(progress * (end - start) + start) + '%';
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+            
+            const engagementStat = document.getElementById('engagement-stat');
+            const loadTimeStat = document.getElementById('load-time-stat');
+            const coverageStat = document.getElementById('coverage-stat');
+            
+            animateValue(engagementStat, 0, 15, 1500);
+            animateValue(loadTimeStat, 0, 30, 1500);
+            animateValue(coverageStat, 0, 85, 1500);
+
+            // Tab Logic for Experience/Projects
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'text-blue-600', 'border-blue-600');
+                        btn.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    });
+                    button.classList.add('active', 'text-blue-600', 'border-blue-600');
+                    button.classList.remove('text-gray-500');
+
+                    tabContents.forEach(content => {
+                        content.style.display = 'none';
+                        if (content.id === tabId) {
+                            content.style.display = 'block';
+                        }
+                    });
+                });
+            });
+
+            // Skills Chart
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['React.js', 'JavaScript/TS', 'Node.js/Express', 'Testing', 'State Mgmt (Redux)', 'UI/Styling', 'Dev Tools'],
+                    datasets: [{
+                        label: 'Proficiency Level',
+                        data: [90, 95, 75, 85, 90, 80, 85],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: '#e5e7eb'
+                            },
+                            grid: {
+                                color: '#e5e7eb'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                },
+                                color: '#4b5563'
+                            },
+                            ticks: {
+                                backdropColor: '#f8f7f4',
+                                color: '#6b7280',
+                                stepSize: 20
+                            },
+                             min: 0,
+                             max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
